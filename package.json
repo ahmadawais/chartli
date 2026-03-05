@@ -1,14 +1,25 @@
 {
   "name": "chartli",
   "version": "0.0.1",
-  "description": "CLI for charts in terminals",
+  "description": "CLI for terminal charts from numeric data",
   "type": "module",
   "bin": {
     "chartli": "./dist/index.js"
   },
   "scripts": {
+    "chartli": "node dist/index.js",
     "build": "tsup",
     "dev": "tsup --watch",
+    "example:ascii": "bash examples/scripts/ascii.sh",
+    "example:spark": "bash examples/scripts/spark.sh",
+    "example:bars": "bash examples/scripts/bars.sh",
+    "example:columns": "bash examples/scripts/columns.sh",
+    "example:heatmap": "bash examples/scripts/heatmap.sh",
+    "example:unicode": "bash examples/scripts/unicode.sh",
+    "example:braille": "bash examples/scripts/braille.sh",
+    "example:svg": "bash examples/scripts/svg.sh",
+    "example:kitchen-sink": "bash examples/scripts/kitchen-sink.sh",
+    "examples": "pnpm run example:kitchen-sink",
     "test": "vitest run",
     "lint": "biome check .",
     "format": "biome format --write ."
