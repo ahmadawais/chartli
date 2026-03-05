@@ -1,18 +1,12 @@
+![npx chartli](https://raw.githubusercontent.com/ahmadawais/chartli/main/.github/chartli.jpg)
+
 # chartli
 
 Tiny terminal charting CLI.
 
 You feed it plain numeric text. It gives you readable charts in your terminal (and SVG when you want pixels).
 
-## 10-second start
-
-```bash
-pnpm install
-pnpm build
-pnpm chartli --help
-```
-
-Fast loop:
+Quick example:
 
 ```bash
 printf '10\n20\n15\n30\n25\n40\n' | npx chartli -t ascii -w 24 -h 8
