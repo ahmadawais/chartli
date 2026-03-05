@@ -9,9 +9,23 @@ import { renderSvg } from '../utils/svg.js';
 import { renderAscii } from '../utils/ascii.js';
 import { renderUnicode } from '../utils/unicode.js';
 import { renderBraille } from '../utils/braille.js';
+import { renderSpark } from '../utils/spark.js';
+import { renderBars } from '../utils/bars.js';
+import { renderColumns } from '../utils/columns.js';
+import { renderHeatmap } from '../utils/heatmap.js';
 
-const ChartTypeSchema = z.enum(['svg', 'ascii', 'unicode', 'braille']);
+const ChartTypeSchema = z.enum([
+	'svg',
+	'ascii',
+	'unicode',
+	'braille',
+	'spark',
+	'bars',
+	'columns',
+	'heatmap',
+]);
 type ChartType = z.infer<typeof ChartTypeSchema>;
+type ChartMode = 'circles' | 'lines';
 
 async function readStdin(): Promise<string> {
 	const lines: string[] = [];
@@ -33,7 +47,7 @@ function renderChart({
 	type: ChartType;
 	width?: number;
 	height?: number;
-	mode?: 'circles' | 'lines';
+	mode?: ChartMode;
 }): string {
 	const rows = parseData(input);
 	const normalized = normalizeData(rows);
@@ -43,16 +57,27 @@ function renderChart({
 	if (type === 'ascii')
 		return renderAscii({ normalized, options: { width, height } });
 	if (type === 'unicode') return renderUnicode({ normalized, options: { width } });
-	return renderBraille({ normalized, options: { width, height } });
+	if (type === 'braille')
+		return renderBraille({ normalized, options: { width, height } });
+	if (type === 'spark') return renderSpark({ normalized });
+	if (type === 'bars') return renderBars({ normalized, options: { width } });
+	if (type === 'columns')
+		return renderColumns({ normalized, options: { height } });
+	return renderHeatmap({ normalized });
 }
 
-export function createChartCommand(): Command {
-	const cmd = new Command('chart');
+function registerChartOptions(cmd: Command, withDescription = true): Command {
+	if (withDescription) {
+		cmd.description('Render charts from numeric data');
+	}
 
-	cmd
-		.description('Turn data into charts')
+	return cmd
 		.argument('[file]', 'Input file (reads from stdin if not provided)')
-		.option('-t, --type <type>', 'Chart type: svg, ascii, unicode, braille', 'ascii')
+		.option(
+			'-t, --type <type>',
+			'Chart type: svg, ascii, unicode, braille, spark, bars, columns, heatmap',
+			'ascii',
+		)
 		.option('-w, --width <number>', 'Chart width', parseInt)
 		.option('-h, --height <number>', 'Chart height', parseInt)
 		.option('-m, --mode <mode>', 'SVG mode: circles or lines', 'circles')
@@ -63,14 +88,20 @@ export function createChartCommand(): Command {
 					type: string;
 					width?: number;
 					height?: number;
-					mode?: string;
+					mode?: ChartMode;
 				},
+				command: Command,
 			) => {
+				if (!file && process.stdin.isTTY) {
+					command.help();
+					return;
+				}
+
 				const typeResult = ChartTypeSchema.safeParse(opts.type);
 				if (!typeResult.success) {
 					console.error(
 						pc.red(
-							`Invalid chart type: ${opts.type}. Use svg, ascii, unicode, or braille.`,
+							`Invalid chart type: ${opts.type}. Use svg, ascii, unicode, braille, spark, bars, columns, or heatmap.`,
 						),
 					);
 					process.exit(1);
@@ -80,9 +111,7 @@ export function createChartCommand(): Command {
 				const spinner = ora(`Generating ${type} chart…`).start();
 
 				try {
-					const input = file
-						? readFileSync(file, 'utf-8')
-						: await readStdin();
+					const input = file ? readFileSync(file, 'utf-8') : await readStdin();
 					const mode = opts.mode === 'lines' ? 'lines' : 'circles';
 					const output = renderChart({
 						input,
@@ -101,6 +130,8 @@ export function createChartCommand(): Command {
 				}
 			},
 		);
+}
 
-	return cmd;
+export function configureRootChartCommand(program: Command): Command {
+	return registerChartOptions(program, false);
 }
