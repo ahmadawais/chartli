@@ -1,6 +1,6 @@
 {
   "name": "chartli",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "CLI for terminal charts from numeric data",
   "type": "module",
   "bin": {
