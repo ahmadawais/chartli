@@ -19,5 +19,5 @@ export function showBanner(): void {
 	} else {
 		console.log(pc.white(banner));
 	}
-	console.log(pc.gray('  Render charts from numeric data\n'));
+	console.log(pc.gray('Render charts from numeric data\n'));
 }
