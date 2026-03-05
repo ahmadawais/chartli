@@ -2,60 +2,95 @@
 
 # chartli
 
-Tiny terminal charting CLI.
+CLI for rendering charts in terminals from numeric text data.
 
-## Quick start (no clone required)
+## Install
+
+Run instantly:
 
 ```sh
 npx chartli --help
 ```
 
+Or install globally:
+
 ```sh
-npx chartli -t spark <<< $'day sales costs profit\n1 10 8 2\n2 14 9 5\n3 12 11 3\n4 18 10 8\n5 16 13 3\n6 20 12 8\n'
+pnpm add -g chartli
 ```
 
-## Command
+Quick start:
+
+```sh
+npx chartli
+npx chartli --help
+```
+
+## Usage
 
 ```sh
 npx chartli [file] [options]
 ```
 
-Arguments:
+```text
+Usage: chartli [options] [file]
 
-- `file`: input text file (if omitted, reads from stdin)
+Render terminal charts from numeric data
+
+Arguments:
+  file                   Input file (reads from stdin if not provided)
 
 Options:
+  -v, --version          Output the version number
+  -t, --type <type>      Chart type: svg, ascii, unicode, braille, spark, bars,
+                         columns, heatmap (default: "ascii")
+  -w, --width <number>   Chart width
+  -h, --height <number>  Chart height
+  -m, --mode <mode>      SVG mode: circles or lines (default: "circles")
+  --help                 Display help for command
+```
 
-- `-t, --type <type>`: `ascii`, `spark`, `bars`, `columns`, `heatmap`, `unicode`, `braille`, `svg`
-- `-w, --width <number>`: width for `ascii`, `bars`, `braille`, `svg`
-- `-h, --height <number>`: height for `ascii`, `columns`, `braille`, `svg`
-- `-m, --mode <mode>`: SVG mode: `circles` or `lines`
+## Types
 
-## Image examples (one-liner, copy/paste)
+- `ascii`
+- `spark`
+- `bars`
+- `columns`
+- `heatmap`
+- `unicode`
+- `braille`
+- `svg`
 
-These use `npx chartli` first with inline data via here-string (works in zsh).
+## Example data files
+
+- `examples/assets/core-single-series.txt`
+- `examples/assets/core-multi-series.txt`
+- `examples/assets/image-data.txt`
+- `examples/assets/image-columns-variant.txt`
+
+## Image chart set (text diagrams)
 
 ### ASCII Line
 
 ```sh
-npx chartli -t ascii -w 24 -h 8 <<< $'day sales costs profit\n1 10 8 2\n2 14 9 5\n3 12 11 3\n4 18 10 8\n5 16 13 3\n6 20 12 8\n'
+pnpm chartli examples/assets/image-data.txt -t ascii -w 24 -h 8
 ```
 
 ```text
-  1.00 │                 ○   ●
-       │             ○   ●
-       │         ○   ●
-  0.50 │     ○   ●       ○
-       │ ○   ●
-       │ ●               ○
-  0.00 │○
+  1.00 │                       ○
+       │
+       │             ◇         ◇
+       │                  ◆    ●
+  0.50 │                  ●    ◆
+       │    ◇    ◆   ●
+       │         ○   ◆
+  0.00 │◇   ◆    ◇        ◇
        └────────────────────────
 ```
 
 ### Sparklines
 
 ```sh
-npx chartli -t spark <<< $'day sales costs profit\n1 10 8 2\n2 14 9 5\n3 12 11 3\n4 18 10 8\n5 16 13 3\n6 20 12 8\n'
+pnpm chartli examples/assets/image-data.txt -t spark
 ```
 
 ```text
@@ -68,7 +103,7 @@ S4 ▁▄▂▇▂▇
 ### Horizontal Bars
 
 ```sh
-npx chartli -t bars -w 28 <<< $'day sales costs profit\n1 10 8 2\n2 14 9 5\n3 12 11 3\n4 18 10 8\n5 16 13 3\n6 20 12 8\n'
+pnpm chartli examples/assets/image-data.txt -t bars -w 28
 ```
 
 ```text
@@ -81,7 +116,7 @@ S4 |░░░░░░░░░░░░░░░░░░░░░░░     | 
 ### Columns
 
 ```sh
-npx chartli -t columns -h 8 <<< $'day sales costs profit\n1 10 8 2\n2 14 9 5\n3 12 11 3\n4 18 10 8\n5 16 13 3\n6 20 12 8\n'
+pnpm chartli examples/assets/image-data.txt -t columns -h 8
 ```
 
 ```text
@@ -97,10 +132,27 @@ npx chartli -t columns -h 8 <<< $'day sales costs profit\n1 10 8 2\n2 14 9 5\n3 
 1 2 3 4
 ```
 
+### Columns (Variant)
+
+```sh
+pnpm chartli examples/assets/image-columns-variant.txt -t columns -h 8
+```
+
+```text
+  ▓   ░
+█ ▓   ░
+█ ▓   ░
+█ ▓ ▒ ░
+█ ▓ ▒ ░
+█ ▓ ▒ ░
+───────
+1 2 3 4
+```
+
 ### Heatmap
 
 ```sh
-npx chartli -t heatmap <<< $'day sales costs profit\n1 10 8 2\n2 14 9 5\n3 12 11 3\n4 18 10 8\n5 16 13 3\n6 20 12 8\n'
+pnpm chartli examples/assets/image-data.txt -t heatmap
 ```
 
 ```text
@@ -116,7 +168,7 @@ R06 ▓ █ ▒ ▓
 ### Unicode Bars
 
 ```sh
-npx chartli -t unicode <<< $'day sales costs profit\n1 10 8 2\n2 14 9 5\n3 12 11 3\n4 18 10 8\n5 16 13 3\n6 20 12 8\n'
+pnpm chartli examples/assets/image-data.txt -t unicode
 ```
 
 ```text
@@ -133,21 +185,23 @@ npx chartli -t unicode <<< $'day sales costs profit\n1 10 8 2\n2 14 9 5\n3 12 11
 ### Braille
 
 ```sh
-npx chartli -t braille -w 16 -h 6 <<< $'day sales costs profit\n1 10 8 2\n2 14 9 5\n3 12 11 3\n4 18 10 8\n5 16 13 3\n6 20 12 8\n'
+pnpm chartli examples/assets/image-data.txt -t braille -w 16 -h 6
 ```
 
 ```text
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠄⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠂⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡀⠀⠀⠈
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠄⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠂⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⡀⠀⠀⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+...
 ```
 
-### SVG
+### SVG Chart
 
 ```sh
-npx chartli -t svg -m lines -w 320 -h 120 <<< $'day sales costs profit\n1 10 8 2\n2 14 9 5\n3 12 11 3\n4 18 10 8\n5 16 13 3\n6 20 12 8\n' | sed -n '/^<?xml/,$p' > chart.svg
+pnpm chartli examples/assets/image-data.txt -t svg -m lines -w 320 -h 120 | sed -n '/^<?xml/,$p' > examples/assets/output/image-chart.svg
 ```
 
 ```text
@@ -160,65 +214,68 @@ npx chartli -t svg -m lines -w 320 -h 120 <<< $'day sales costs profit\n1 10 8 2
 </svg>
 ```
 
-## Run all examples in one go (no clone)
+# Examples
 
-```sh
-npx chartli -t ascii -w 24 -h 8 <<< $'day sales costs profit\n1 10 8 2\n2 14 9 5\n3 12 11 3\n4 18 10 8\n5 16 13 3\n6 20 12 8\n'; npx chartli -t spark <<< $'day sales costs profit\n1 10 8 2\n2 14 9 5\n3 12 11 3\n4 18 10 8\n5 16 13 3\n6 20 12 8\n'; npx chartli -t bars -w 28 <<< $'day sales costs profit\n1 10 8 2\n2 14 9 5\n3 12 11 3\n4 18 10 8\n5 16 13 3\n6 20 12 8\n'; npx chartli -t columns -h 8 <<< $'day sales costs profit\n1 10 8 2\n2 14 9 5\n3 12 11 3\n4 18 10 8\n5 16 13 3\n6 20 12 8\n'; npx chartli -t heatmap <<< $'day sales costs profit\n1 10 8 2\n2 14 9 5\n3 12 11 3\n4 18 10 8\n5 16 13 3\n6 20 12 8\n'; npx chartli -t unicode <<< $'day sales costs profit\n1 10 8 2\n2 14 9 5\n3 12 11 3\n4 18 10 8\n5 16 13 3\n6 20 12 8\n'; npx chartli -t braille -w 16 -h 6 <<< $'day sales costs profit\n1 10 8 2\n2 14 9 5\n3 12 11 3\n4 18 10 8\n5 16 13 3\n6 20 12 8\n'; npx chartli -t svg -m lines -w 320 -h 120 <<< $'day sales costs profit\n1 10 8 2\n2 14 9 5\n3 12 11 3\n4 18 10 8\n5 16 13 3\n6 20 12 8\n' | sed -n '/^<?xml/,$p' > chart.svg
-```
+All examples are data-file driven from `examples/assets/`.
 
-## Repo kitchen sink (if cloned)
+## Data files
 
-If you cloned this repo, all example scripts are flat in `examples/` (data/output are in `examples/assets/`):
+- `examples/assets/core-single-series.txt`
+- `examples/assets/core-multi-series.txt`
+- `examples/assets/image-data.txt`
+- `examples/assets/image-columns-variant.txt`
+- `examples/assets/output/`
 
-- `examples/ascii.sh`
-- `examples/spark.sh`
-- `examples/bars.sh`
-- `examples/columns.sh`
-- `examples/heatmap.sh`
-- `examples/unicode.sh`
-- `examples/braille.sh`
-- `examples/svg.sh`
-- `examples/kitchen-sink.sh`
-- `examples/image-ascii-line.sh`
-- `examples/image-sparklines.sh`
-- `examples/image-horizontal-bars.sh`
-- `examples/image-columns.sh`
-- `examples/image-heatmap.sh`
-- `examples/image-unicode-bars.sh`
-- `examples/image-braille.sh`
-- `examples/image-svg.sh`
-- `examples/image-kitchen-sink.sh`
-- `examples/all-kitchen-sink.sh`
+## Core commands
 
-Run core set:
+- `pnpm chartli examples/assets/core-single-series.txt -t ascii -w 24 -h 8`
+- `pnpm chartli examples/assets/core-multi-series.txt -t spark`
+- `pnpm chartli examples/assets/core-multi-series.txt -t bars -w 28`
+- `pnpm chartli examples/assets/core-multi-series.txt -t columns -h 8`
+- `pnpm chartli examples/assets/core-multi-series.txt -t heatmap`
+- `pnpm chartli examples/assets/core-multi-series.txt -t unicode`
+- `pnpm chartli examples/assets/core-single-series.txt -t braille -w 16 -h 6`
+- `pnpm chartli examples/assets/core-multi-series.txt -t svg -m lines -w 320 -h 120 | sed -n '/^<?xml/,$p' > examples/assets/output/core-chart.svg`
 
-```sh
-pnpm run example:kitchen-sink
-```
+## Image commands
 
-Run image-matched set:
+- `pnpm chartli examples/assets/image-data.txt -t ascii -w 24 -h 8`
+- `pnpm chartli examples/assets/image-data.txt -t spark`
+- `pnpm chartli examples/assets/image-data.txt -t bars -w 28`
+- `pnpm chartli examples/assets/image-data.txt -t columns -h 8`
+- `pnpm chartli examples/assets/image-columns-variant.txt -t columns -h 8`
+- `pnpm chartli examples/assets/image-data.txt -t heatmap`
+- `pnpm chartli examples/assets/image-data.txt -t unicode`
+- `pnpm chartli examples/assets/image-data.txt -t braille -w 16 -h 6`
+- `pnpm chartli examples/assets/image-data.txt -t svg -m lines -w 320 -h 120 | sed -n '/^<?xml/,$p' > examples/assets/output/image-chart.svg`
+
+## Run grouped examples
+
+- `pnpm run example:kitchen-sink`
+- `pnpm run example:image-set:kitchen-sink`
+- `pnpm run example:all-kitchen-sink`
+
+## Run all examples
+
+Image-set chart run:
 
 ```sh
 pnpm run example:image-set:kitchen-sink
 ```
 
-Run both sets together:
+Core + image run:
 
 ```sh
 pnpm run example:all-kitchen-sink
 ```
 
-## Technical depth
+## Agent skill install
 
-Data path is simple and intentional:
+Install the repository skill for agents:
 
-1. Parse whitespace rows into a numeric matrix.
-2. Auto-detect and skip a header row.
-3. Normalize each column to `[0, 1]`.
-4. Apply delta-aware scaling so high-variance series do not flatten lower-variance series.
-5. Project normalized values into renderer-specific glyph spaces.
-
-That gives you chart outputs that are tiny, fast, and legible in plain terminal text.
+```sh
+npx skills add ahmadawais/chartli
+```
 
 ## License
 

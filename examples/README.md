@@ -1,57 +1,40 @@
 # Examples
 
-All runnable example scripts are flat in this folder.
+All examples are data-file driven from `examples/assets/`.
 
-## Assets
+## Data files
 
-Data and generated files live in `examples/assets/`:
-
-- `examples/assets/core-multi-series.txt`
 - `examples/assets/core-single-series.txt`
+- `examples/assets/core-multi-series.txt`
 - `examples/assets/image-data.txt`
-- `examples/assets/image-single-series.txt`
+- `examples/assets/image-columns-variant.txt`
 - `examples/assets/output/`
 
-## Core examples
+## Core commands
 
-- `examples/ascii.sh`
-- `examples/spark.sh`
-- `examples/bars.sh`
-- `examples/columns.sh`
-- `examples/heatmap.sh`
-- `examples/unicode.sh`
-- `examples/braille.sh`
-- `examples/svg.sh`
-- `examples/kitchen-sink.sh`
+- `pnpm chartli examples/assets/core-single-series.txt -t ascii -w 24 -h 8`
+- `pnpm chartli examples/assets/core-multi-series.txt -t spark`
+- `pnpm chartli examples/assets/core-multi-series.txt -t bars -w 28`
+- `pnpm chartli examples/assets/core-multi-series.txt -t columns -h 8`
+- `pnpm chartli examples/assets/core-multi-series.txt -t heatmap`
+- `pnpm chartli examples/assets/core-multi-series.txt -t unicode`
+- `pnpm chartli examples/assets/core-single-series.txt -t braille -w 16 -h 6`
+- `pnpm chartli examples/assets/core-multi-series.txt -t svg -m lines -w 320 -h 120 | sed -n '/^<?xml/,$p' > examples/assets/output/core-chart.svg`
 
-## Image-matched examples
+## Image commands
 
-- `examples/image-ascii-line.sh`
-- `examples/image-sparklines.sh`
-- `examples/image-horizontal-bars.sh`
-- `examples/image-columns.sh`
-- `examples/image-heatmap.sh`
-- `examples/image-unicode-bars.sh`
-- `examples/image-braille.sh`
-- `examples/image-svg.sh`
-- `examples/image-kitchen-sink.sh`
+- `pnpm chartli examples/assets/image-data.txt -t ascii -w 24 -h 8`
+- `pnpm chartli examples/assets/image-data.txt -t spark`
+- `pnpm chartli examples/assets/image-data.txt -t bars -w 28`
+- `pnpm chartli examples/assets/image-data.txt -t columns -h 8`
+- `pnpm chartli examples/assets/image-columns-variant.txt -t columns -h 8`
+- `pnpm chartli examples/assets/image-data.txt -t heatmap`
+- `pnpm chartli examples/assets/image-data.txt -t unicode`
+- `pnpm chartli examples/assets/image-data.txt -t braille -w 16 -h 6`
+- `pnpm chartli examples/assets/image-data.txt -t svg -m lines -w 320 -h 120 | sed -n '/^<?xml/,$p' > examples/assets/output/image-chart.svg`
 
-## Run commands
+## Run grouped examples
 
-Run core set:
-
-```sh
-pnpm run example:kitchen-sink
-```
-
-Run image set:
-
-```sh
-pnpm run example:image-set:kitchen-sink
-```
-
-Run both sets:
-
-```sh
-pnpm run example:all-kitchen-sink
-```
+- `pnpm run example:kitchen-sink`
+- `pnpm run example:image-set:kitchen-sink`
+- `pnpm run example:all-kitchen-sink`
