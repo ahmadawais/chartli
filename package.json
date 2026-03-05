@@ -20,6 +20,7 @@
     "example:svg": "bash examples/scripts/svg.sh",
     "example:kitchen-sink": "bash examples/scripts/kitchen-sink.sh",
     "examples": "pnpm run example:kitchen-sink",
+    "ex:kitchen-sink": "bash ex/scripts/kitchen-sink.sh",
     "test": "vitest run",
     "lint": "biome check .",
     "format": "biome format --write ."

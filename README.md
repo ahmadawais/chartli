@@ -1,21 +1,25 @@
-![npx chartli](https://raw.githubusercontent.com/ahmadawais/chartli/main/.github/chartli.jpg)
+![npx chartli](https://github.com/ahmadawais/chartli/blob/main/.github/chartli.jpg?raw=true)
 
 # chartli
 
 Tiny terminal charting CLI.
 
-You feed it plain numeric text. It gives you readable charts in your terminal (and SVG when you want pixels).
+You feed it numeric text. It renders charts directly in your terminal.
 
-Quick example:
+## Quick start
 
 ```bash
-printf '10\n20\n15\n30\n25\n40\n' | npx chartli -t ascii -w 24 -h 8
+npx chartli --help
+```
+
+```bash
+npx chartli ex/data.txt -t spark
 ```
 
 ## Command
 
 ```bash
-pnpm chartli [file] [options]
+npx chartli [file] [options]
 ```
 
 Arguments:
@@ -32,9 +36,9 @@ Options:
 ## Input format
 
 - Whitespace-separated numeric columns
-- Optional header row (auto-ignored when first row has non-numeric tokens)
+- Optional header row (auto-skipped when first row has non-numeric tokens)
 
-Example:
+Example data (`ex/data.txt`):
 
 ```txt
 day sales costs profit
@@ -46,12 +50,12 @@ day sales costs profit
 6 20 12 8
 ```
 
-## Chart gallery (real CLI output)
+## Gallery (same styles as image)
 
-### `ascii`
+### ASCII Line
 
 ```bash
-pnpm chartli examples/single-series.txt -t ascii -w 24 -h 8
+npx chartli ex/data.txt -t ascii -w 24 -h 8
 ```
 
 ```text
@@ -65,10 +69,10 @@ pnpm chartli examples/single-series.txt -t ascii -w 24 -h 8
        └────────────────────────
 ```
 
-### `spark`
+### Sparklines
 
 ```bash
-pnpm chartli examples/multi-series.txt -t spark
+npx chartli ex/data.txt -t spark
 ```
 
 ```text
@@ -78,10 +82,10 @@ S3 ▁▂▄▃▆▅
 S4 ▁▄▂▇▂▇
 ```
 
-### `bars`
+### Horizontal Bars
 
 ```bash
-pnpm chartli examples/multi-series.txt -t bars -w 28
+npx chartli ex/data.txt -t bars -w 28
 ```
 
 ```text
@@ -91,10 +95,10 @@ S3 |▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒             | 0.53
 S4 |░░░░░░░░░░░░░░░░░░░░░░░     | 0.83
 ```
 
-### `columns`
+### Columns
 
 ```bash
-pnpm chartli examples/multi-series.txt -t columns -h 8
+npx chartli ex/data.txt -t columns -h 8
 ```
 
 ```text
@@ -107,10 +111,10 @@ pnpm chartli examples/multi-series.txt -t columns -h 8
 1 2 3 4
 ```
 
-### `heatmap`
+### Heatmap
 
 ```bash
-pnpm chartli examples/multi-series.txt -t heatmap
+npx chartli ex/data.txt -t heatmap
 ```
 
 ```text
@@ -123,10 +127,10 @@ R05 ▒ ▒ ▓ ░
 R06 ▓ █ ▒ ▓
 ```
 
-### `unicode`
+### Unicode Bars
 
 ```bash
-pnpm chartli examples/multi-series.txt -t unicode
+npx chartli ex/data.txt -t unicode
 ```
 
 ```text
@@ -140,10 +144,10 @@ pnpm chartli examples/multi-series.txt -t unicode
  █████   █████   █████   █████
 ```
 
-### `braille`
+### Braille
 
 ```bash
-pnpm chartli examples/single-series.txt -t braille -w 16 -h 6
+npx chartli ex/data.txt -t braille -w 16 -h 6
 ```
 
 ```text
@@ -155,72 +159,47 @@ pnpm chartli examples/single-series.txt -t braille -w 16 -h 6
 ⡀⠀⠀⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ```
 
-### `svg`
+### SVG
 
 ```bash
-pnpm chartli examples/multi-series.txt -t svg -m lines -w 320 -h 120 > chart.svg
+npx chartli ex/data.txt -t svg -m lines -w 320 -h 120 > chart.svg
 ```
 
-## One-file-per-type examples
+## `ex/` folder
 
-- `examples/scripts/ascii.sh`
-- `examples/scripts/spark.sh`
-- `examples/scripts/bars.sh`
-- `examples/scripts/columns.sh`
-- `examples/scripts/heatmap.sh`
-- `examples/scripts/unicode.sh`
-- `examples/scripts/braille.sh`
-- `examples/scripts/svg.sh`
+Image-style examples are also bundled in `ex/`:
 
-Kitchen sink (run everything):
+- `ex/data.txt`
+- `ex/scripts/ascii-line.sh`
+- `ex/scripts/sparklines.sh`
+- `ex/scripts/horizontal-bars.sh`
+- `ex/scripts/columns.sh`
+- `ex/scripts/heatmap.sh`
+- `ex/scripts/unicode-bars.sh`
+- `ex/scripts/braille.sh`
+- `ex/scripts/svg.sh`
+- `ex/scripts/kitchen-sink.sh`
 
-- `examples/scripts/kitchen-sink.sh`
-
-Commands:
+Run all `ex` examples in one go:
 
 ```bash
-pnpm run example:ascii
-pnpm run example:spark
-pnpm run example:bars
-pnpm run example:columns
-pnpm run example:heatmap
-pnpm run example:unicode
-pnpm run example:braille
-pnpm run example:svg
-pnpm run example:kitchen-sink
-pnpm run examples
+bash ex/scripts/kitchen-sink.sh
 ```
 
-## Under the hood (for nerds)
-
-This CLI does a small but important sequence:
-
-1. Parse rows and columns from whitespace text.
-2. Detect/skip a header row automatically.
-3. Normalize each column independently to `[0, 1]`.
-4. Apply a delta-based “squish” per column so huge-variance series do not visually crush small-variance series.
-5. Render normalized values into chart-specific glyph spaces.
-
-Renderer mapping:
-
-- `spark`: 8-level mini bars (`▁..█`) per series.
-- `bars`: final value of each series mapped to horizontal bar width.
-- `columns`: final value of each series mapped to vertical levels.
-- `heatmap`: each cell mapped to shade levels (` `, `░`, `▒`, `▓`, `█`).
-- `ascii` / `unicode` / `braille`: path-like visualizations with different terminal glyph densities.
-- `svg`: vector output with optional `circles` or `lines` mode.
-
-Complexity profile (roughly):
-
-- Parse/normalize: `O(rows * cols)`
-- Most terminal renderers: `O(rows * cols)` to `O(width * height * cols)` depending on mode
-- SVG: linear in rendered points
-
-## Development
+or:
 
 ```bash
-pnpm build
-pnpm test
-pnpm lint
-pnpm format
+pnpm run ex:kitchen-sink
 ```
+
+## Technical depth
+
+Data path is simple and intentional:
+
+1. Parse whitespace rows into a numeric matrix.
+2. Auto-detect and skip a header row.
+3. Normalize each column to `[0, 1]`.
+4. Apply delta-aware scaling so high-variance series do not flatten lower-variance series.
+5. Project normalized values into renderer-specific glyph spaces.
+
+That gives you chart outputs that are tiny, fast, and surprisingly legible in plain terminal text.
