@@ -1,2 +1,6 @@
 node_modules/
 dist/
+
+# Rust
+rust/target/
+rust/npm/binaries/
