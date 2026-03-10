@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.0](https://github.com/ahmadawais/chartli/compare/0.0.5...1.0.0) (2026-03-10)
+
+### Features
+
+* add chart labels and labeled examples ([de2f44e](https://github.com/ahmadawais/chartli/commit/de2f44e14b94fe1051c2b51b2e1e40ea024e4660))
+
 ## 0.0.5 (2026-03-06)
 
 ### Features
