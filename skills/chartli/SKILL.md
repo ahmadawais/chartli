@@ -13,6 +13,8 @@ Use this skill when an agent needs to visualize numeric data in the terminal as 
 npx skills add ahmadawais/chartli
 ```
 
+For omp, the native project skill at `.omp/skills/chartli/SKILL.md` is discovered automatically when this repository is open. To use it in another omp project, copy or symlink `skills/chartli` into that project's `.omp/skills/` directory. Invoke it with `/skill:chartli` or read it through `skill://chartli`.
+
 ## CLI install/use
 
 Instant use:

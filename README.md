@@ -27,6 +27,8 @@ Install the repository skill for agents:
 npx skills add ahmadawais/chartli
 ```
 
+For omp, the repository includes a native project skill at `.omp/skills/chartli/SKILL.md`; it is discovered automatically when this repository is open. To use it in another omp project, copy or symlink `skills/chartli` into that project's `.omp/skills/` directory.
+
 Quick start:
 
 ```sh
